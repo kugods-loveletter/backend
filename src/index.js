@@ -6,6 +6,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import { saveSessionToLocal } from "./middleware";
 
+import rootRouter from "./routers/rootRouter";
+
 const app = express();
 const PORT = 4000;
 
@@ -24,3 +26,5 @@ app.use(
     })
 );
 app.use(saveSessionToLocal);
+
+app.use("/", rootRouter);
