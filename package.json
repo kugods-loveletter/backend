@@ -1,0 +1,49 @@
+{
+    "name": "loveletter-backend",
+    "version": "1.0.0",
+    "description": "KUGODS loveletter 팀 back-end server입니다.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kugods-loveletter/backend.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kugods-loveletter/backend/issues"
+    },
+    "homepage": "https://github.com/kugods-loveletter/backend#readme",
+    "dependencies": {
+        "@ffmpeg/core": "^0.8.5",
+        "@ffmpeg/ffmpeg": "^0.9.7",
+        "bcrypt": "^5.0.1",
+        "connect-mongo": "^4.4.1",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-flash": "^0.0.2",
+        "express-session": "^1.17.1",
+        "mongoose": ">=6.4.6",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
+        "node-fetch": "^2.6.7",
+        "pug": "^3.0.2",
+        "regenerator-runtime": "^0.13.7"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.13.10",
+        "@babel/node": "^7.13.10",
+        "@babel/preset-env": "^7.13.10",
+        "babel-loader": "^8.2.2",
+        "css-loader": "^5.2.2",
+        "mini-css-extract-plugin": "^1.5.0",
+        "nodemon": "^2.0.7",
+        "sass": "^1.32.10",
+        "sass-loader": "^11.0.1",
+        "style-loader": "^2.0.0",
+        "webpack": "^5.33.2",
+        "webpack-cli": "^4.6.0"
+    }
+}
