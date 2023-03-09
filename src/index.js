@@ -2,10 +2,25 @@ import "dotenv/config";
 import express from "express";
 import "./db";
 
-const app = express();
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import { saveSessionToLocal } from "./middleware";
 
+const app = express();
 const PORT = 4000;
 
 app.listen(PORT, () => {
     console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 });
+
+app.use(
+    session({
+        secret: process.env.COOKIE_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_URL,
+        }),
+    })
+);
+app.use(saveSessionToLocal);
