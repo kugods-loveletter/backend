@@ -1,17 +1,31 @@
 import mongoose from "mongoose";
 const letterSchema = new mongoose.Schema({
-    sender_id: {
+    senderId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
-    receiver_id: {
+    receiverId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
     title: { type: String },
     body: { type: Sting },
+    isFromPosting: { type: Boolean, default: false },
+    isRoot: { type: Boolean, default: false },
+    parentPostingId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Letter",
+    },
+    rootLetterId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Letter",
+        required: true,
+    },
+    childrenLetterIdArray: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
+    ],
     isChecking: { type: Boolean, default: false },
 });
 
