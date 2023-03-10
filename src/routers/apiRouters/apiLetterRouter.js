@@ -15,12 +15,10 @@ apiLetterRouter
     .get(getOneLetter)
     .patch(patchOneLetter)
     .delete(deleteOneLetter);
-apiLetterRouter.route("/:letterId/allLettersArray").get(getAllLettersArray);
+apiLetterRouter.route("/:letterId/allLetters").get(getAllLettersArray);
+apiLetterRouter.route("/:letterId/parentLetters").get(getParentLettersArray);
 apiLetterRouter
-    .route("/:letterId/parentLettersArray")
-    .get(getParentLettersArray);
-apiLetterRouter
-    .route("/:letterId/daughterLettersArray")
+    .route("/:letterId/daughterLetters")
     .get(getDaughterLettersArray);
 
 export default apiLetterRouter;
