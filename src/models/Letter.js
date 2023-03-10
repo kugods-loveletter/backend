@@ -12,21 +12,20 @@ const letterSchema = new mongoose.Schema({
     },
     title: { type: String },
     body: { type: Sting },
-    isLetterReply: { type: Boolean, default: false },
-    isPostingReply: { type: Boolean, default: false },
-    hasReply: { type: Boolean, default: false },
+    isFromPosting: { type: Boolean, default: false },
+    isRoot: { type: Boolean, default: false },
     parentPostingId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Letter",
     },
-    parentLetterId: {
+    rootLetterId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Letter",
+        required: true,
     },
-    daughterLetterId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Letter",
-    },
+    childrenLetterIdArray: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
+    ],
     isChecking: { type: Boolean, default: false },
 });
 
