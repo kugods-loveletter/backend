@@ -8,4 +8,4 @@ export const getAllLettersArray = (req, res) => {};
 
 export const getParentLettersArray = (req, res) => {};
 
-export const getDaughterLettersArray = (req, res) => {};
+export const getChildrenLettersArray = (req, res) => {};

@@ -5,7 +5,7 @@ import {
     deleteOneLetter,
     getAllLettersArray,
     getParentLettersArray,
-    getDaughterLettersArray,
+    getChildrenLettersArray,
 } from "../../controllers/apiControllers/apiLetterController";
 
 const apiLetterRouter = express.Router();
@@ -15,12 +15,10 @@ apiLetterRouter
     .get(getOneLetter)
     .patch(patchOneLetter)
     .delete(deleteOneLetter);
-apiLetterRouter.route("/:letterId/allLettersArray").get(getAllLettersArray);
+apiLetterRouter.route("/:letterId/allLetters").get(getAllLettersArray);
+apiLetterRouter.route("/:letterId/parentLetters").get(getParentLettersArray);
 apiLetterRouter
-    .route("/:letterId/parentLettersArray")
-    .get(getParentLettersArray);
-apiLetterRouter
-    .route("/:letterId/daughterLettersArray")
-    .get(getDaughterLettersArray);
+    .route("/:letterId/ChildrenLetters")
+    .get(getChildrenLettersArray);
 
 export default apiLetterRouter;
