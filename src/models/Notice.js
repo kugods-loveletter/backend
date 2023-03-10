@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const noticeSchema = new mongoose.Schema({
-    user_id: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
