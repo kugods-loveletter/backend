@@ -46,3 +46,22 @@ export const getLogin = (req, res) => {
     return res.send("로그인 페이지 구현을 위한 URL");
 };
 
+export const postLogin = async (req, res) => {
+    const { id, pw } = req.body;
+    const user = await User.findOne({ id });
+    if (!user) {
+        return httpResponse.BAD_REQUEST(res, "", "계정이 존재하지 않습니다.");
+    } else {
+        const ok = await bcrypt.compare(pw, user.pw);
+        if (!ok) {
+            return httpResponse.BAD_REQUEST(
+                res,
+                "",
+                "비밀번호가 올바르지 않습니다."
+            );
+        } else {
+            loginUserToSession(req, user);
+            return httpResponse.SUCCESS_OK(res, "", user);
+        }
+    }
+};
