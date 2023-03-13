@@ -42,3 +42,7 @@ export const postSignup = async (req, res) => {
     }
 };
 
+export const getLogin = (req, res) => {
+    return res.send("로그인 페이지 구현을 위한 URL");
+};
+
