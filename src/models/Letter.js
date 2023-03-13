@@ -11,7 +11,7 @@ const letterSchema = new mongoose.Schema({
         required: true,
     },
     title: { type: String },
-    body: { type: Sting },
+    body: { type: String },
     isFromPosting: { type: Boolean, default: false },
     isRoot: { type: Boolean, default: false },
     parentPostingId: {
@@ -26,7 +26,7 @@ const letterSchema = new mongoose.Schema({
     childrenLetterIdArray: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
     ],
-    isChecking: { type: Boolean, default: false },
+    isChecking: { type: Number, default: false },
 });
 
 const Letter = mongoose.model("Letter", letterSchema);

@@ -7,6 +7,7 @@ const noticeSchema = new mongoose.Schema({
     },
     title: { type: String },
     body: { type: String },
+    isChecking: { type: Number },
 });
 
 const Notice = mongoose.model("Notice", noticeSchema);

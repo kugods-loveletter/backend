@@ -10,6 +10,7 @@ const postingSchema = new mongoose.Schema({
     replyLetterIdArray: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
     ],
+    isChecking: { type: Number },
 });
 
 const Posting = mongoose.model("Potice", postingSchema);
