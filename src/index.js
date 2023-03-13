@@ -14,7 +14,8 @@ const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 });
-
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
     session({
         secret: process.env.COOKIE_SECRET,
