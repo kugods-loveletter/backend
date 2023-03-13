@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import "./db";
+import "./config/db";
 
 import session from "express-session";
 import MongoStore from "connect-mongo";
