@@ -13,7 +13,6 @@ export const getAllUsers = async (req, res) => {
 
 export const getOneUser = async (req, res) => {
     const id = req.params.userId;
-    console.log(id);
     try {
         const user = await User.find({_id: `${id}`});
         return httpResponse.SUCCESS_OK(res, "", user);

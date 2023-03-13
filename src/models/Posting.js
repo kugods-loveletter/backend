@@ -13,5 +13,5 @@ const postingSchema = new mongoose.Schema({
     isChecking: { type: Number },
 });
 
-const Posting = mongoose.model("Potice", postingSchema);
+const Posting = mongoose.model("Posting", postingSchema);
 export default Posting;
