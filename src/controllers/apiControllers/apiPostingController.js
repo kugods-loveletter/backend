@@ -1,3 +1,4 @@
+const { httpResponse } = require("../../config/http-response");
 export const getAllPostings = (req, res) => {};
 export const postOnePosting = (req, res) => {};
 export const getOnePosting = (req, res) => {};
