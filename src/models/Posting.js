@@ -10,7 +10,8 @@ const postingSchema = new mongoose.Schema({
     replyLetterIdArray: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
     ],
-    isChecking: { type: Number },
+    isChecking: { type: Boolean, default: false },
+    like: { type: Number, default: 0 },
 });
 
 const Posting = mongoose.model("Posting", postingSchema);

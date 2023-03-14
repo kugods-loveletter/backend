@@ -26,7 +26,8 @@ const letterSchema = new mongoose.Schema({
     childrenLetterIdArray: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
     ],
-    isChecking: { type: Number, default: false },
+    isChecking: { type: Boolean, default: false },
+    like: { type: Number, default: 0 },
 });
 
 const Letter = mongoose.model("Letter", letterSchema);
