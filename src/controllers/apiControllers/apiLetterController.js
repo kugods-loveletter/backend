@@ -1,10 +1,21 @@
 const { httpResponse } = require("../../config/http-response");
 import Letter from "../../models/Letter";
 
+export const getOneLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const letterInfo = await Letter.findById(letterId);
+        httpResponse.SUCCESS_OK(res, "", letterInfo);
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
+
 export const postOneLetter = async (req, res) => {
     try {
-        const { title, body, parentLetterId } = req.body;
+        const parentLetterId = req.params.letterId;
         const parentLetter = await Letter.findById(parentLetterId);
+        const { title, body } = req.body;
         const senderId = parentLetter.receiverId;
         const receiverId = parentLetter.senderId;
         const rootLetterId = parentLetter.rootLetterId;
@@ -16,16 +27,7 @@ export const postOneLetter = async (req, res) => {
             parentLetterId,
             rootLetterId,
         });
-    } catch (error) {
-        httpResponse.BAD_REQUEST(res, "", error);
-    }
-};
-
-export const getOneLetter = async (req, res) => {
-    try {
-        const { letterId } = req.params;
-        const letterInfo = await Letter.findById(letterId);
-        httpResponse.SUCCESS_OK(res, "", letterInfo);
+        httpResponse.SUCCESS_OK(res, "", letter);
     } catch (error) {
         httpResponse.BAD_REQUEST(res, "", error);
     }

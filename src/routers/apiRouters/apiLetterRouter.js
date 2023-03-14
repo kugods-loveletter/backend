@@ -11,10 +11,10 @@ import {
 
 const apiLetterRouter = express.Router();
 
-apiLetterRouter.route("/").post(postOneLetter);
 apiLetterRouter
     .route("/:letterId")
     .get(getOneLetter)
+    .post(postOneLetter)
     .patch(patchOneLetter)
     .delete(deleteOneLetter);
 apiLetterRouter.route("/:letterId/allLetters").get(getAllLettersArray);
