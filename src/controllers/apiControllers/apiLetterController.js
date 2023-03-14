@@ -24,7 +24,7 @@ export const postOneLetter = async (req, res) => {
 export const getOneLetter = async (req, res) => {
     try {
         const { letterId } = req.params;
-        const letterInfo = await Letter.find({ _id: letterId });
+        const letterInfo = await Letter.findById(letterId);
         httpResponse.SUCCESS_OK(res, "", letterInfo);
     } catch (error) {
         httpResponse.BAD_REQUEST(res, "", error);
@@ -39,11 +39,11 @@ export const patchOneLetter = async (req, res) => {
             receiverId,
             title,
             body,
-            isFromPosting,
             isRoot,
             parentPostingId,
+            parentLetterId,
             rootLetterId,
-            letterIdArray,
+            childrenLetterIdArray,
             isChecking,
             like,
         } = req.body;
@@ -54,11 +54,11 @@ export const patchOneLetter = async (req, res) => {
                 receiverId,
                 title,
                 body,
-                isFromPosting,
                 isRoot,
                 parentPostingId,
+                parentLetterId,
                 rootLetterId,
-                letterIdArray,
+                childrenLetterIdArray,
                 isChecking,
                 like,
             },
