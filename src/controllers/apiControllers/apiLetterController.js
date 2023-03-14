@@ -1,13 +1,91 @@
 const { httpResponse } = require("../../config/http-response");
+import Letter from "../../models/Letter";
 
-export const getOneLetter = (req, res) => {};
+export const getOneLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const letterInfo = await Letter.find({ _id: letterId });
+        httpResponse.SUCCESS_OK(res, "", letterInfo);
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
-export const patchOneLetter = (req, res) => {};
+export const patchOneLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const {
+            senderId,
+            receiverId,
+            title,
+            body,
+            isFromPosting,
+            isRoot,
+            parentPostingId,
+            rootLetterId,
+            letterIdArray,
+            isChecking,
+            like,
+        } = req.body;
+        const newLetter = await Letter.findByIdAndUpdate(
+            letterId,
+            {
+                senderId,
+                receiverId,
+                title,
+                body,
+                isFromPosting,
+                isRoot,
+                parentPostingId,
+                rootLetterId,
+                letterIdArray,
+                isChecking,
+                like,
+            },
+            { new: true }
+        );
+        httpResponse.SUCCESS_OK(res, "", newLetter);
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
-export const deleteOneLetter = (req, res) => {};
+export const deleteOneLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        await Letter.findByIdAndDelete(letterId);
+        httpResponse.SUCCESS_OK(
+            res,
+            `id가 ${letterId}인 letter를 삭제했습니다.`,
+            {}
+        );
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
-export const getAllLettersArray = (req, res) => {};
+export const getAllLettersArray = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const { rootLetterId } = await Letter.find({ _id: letterId });
+        const { letterIdArray } = await Letter.find({ _id: rootLetterId });
+        const letterArray = await letterIdArray.populate("letterIdArray");
+        httpResponse.SUCCESS_OK(res, "", { letterArray });
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
-export const getParentLettersArray = (req, res) => {};
+export const getParentLettersArray = (req, res) => {
+    try {
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
-export const getChildrenLettersArray = (req, res) => {};
+export const getChildrenLettersArray = (req, res) => {
+    try {
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};

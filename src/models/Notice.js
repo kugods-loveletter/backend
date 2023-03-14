@@ -7,7 +7,8 @@ const noticeSchema = new mongoose.Schema({
     },
     title: { type: String },
     body: { type: String },
-    isChecking: { type: Number },
+    isChecking: { type: Boolean, default: false },
+    like: { type: Number, default: 0 },
 });
 
 const Notice = mongoose.model("Notice", noticeSchema);
