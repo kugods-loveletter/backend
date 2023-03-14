@@ -25,6 +25,7 @@ export const patchOneLetter = async (req, res) => {
             rootLetterId,
             letterIdArray,
             isChecking,
+            like,
         } = req.body;
         const newLetter = await Letter.findByIdAndUpdate(
             letterId,
@@ -39,6 +40,7 @@ export const patchOneLetter = async (req, res) => {
                 rootLetterId,
                 letterIdArray,
                 isChecking,
+                like,
             },
             { new: true }
         );
