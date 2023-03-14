@@ -4,8 +4,7 @@
     "description": "KUGODS loveletter 팀 back-end server입니다.",
     "main": "index.js",
     "scripts": {
-        "dev_server": "nodemon --exec babel-node src/index.js",
-        "start":"nodemon --exec babel-node src/index.js"
+        "start": "nodemon --exec babel-node src/index.js"
     },
     "repository": {
         "type": "git",
