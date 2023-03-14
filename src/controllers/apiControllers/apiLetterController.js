@@ -62,7 +62,17 @@ export const deleteOneLetter = async (req, res) => {
     }
 };
 
-export const getAllLettersArray = (req, res) => {};
+export const getAllLettersArray = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const { rootLetterId } = await Letter.find({ _id: letterId });
+        const { letterIdArray } = await Letter.find({ _id: rootLetterId });
+        const letterArray = await letterIdArray.populate("letterIdArray");
+        httpResponse.SUCCESS_OK(res, "", { letterArray });
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
 export const getParentLettersArray = (req, res) => {};
 
