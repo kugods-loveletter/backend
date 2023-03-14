@@ -74,6 +74,16 @@ export const getAllLettersArray = async (req, res) => {
     }
 };
 
-export const getParentLettersArray = (req, res) => {};
+export const getParentLettersArray = (req, res) => {
+    try {
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
-export const getChildrenLettersArray = (req, res) => {};
+export const getChildrenLettersArray = (req, res) => {
+    try {
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
