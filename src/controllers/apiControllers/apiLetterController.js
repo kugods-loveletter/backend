@@ -48,7 +48,19 @@ export const patchOneLetter = async (req, res) => {
     }
 };
 
-export const deleteOneLetter = (req, res) => {};
+export const deleteOneLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        await Letter.findByIdAndDelete(letterId);
+        httpResponse.SUCCESS_OK(
+            res,
+            `id가 ${letterId}인 letter를 삭제했습니다.`,
+            {}
+        );
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
 export const getAllLettersArray = (req, res) => {};
 
