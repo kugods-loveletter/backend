@@ -12,9 +12,12 @@ const letterSchema = new mongoose.Schema({
     },
     title: { type: String },
     body: { type: String },
-    isFromPosting: { type: Boolean, default: false },
     isRoot: { type: Boolean, default: false },
     parentPostingId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Posting",
+    },
+    parentLetterId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Letter",
     },

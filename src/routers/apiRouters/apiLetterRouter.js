@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    postOneLetter,
     getOneLetter,
     patchOneLetter,
     deleteOneLetter,
@@ -10,6 +11,7 @@ import {
 
 const apiLetterRouter = express.Router();
 
+apiLetterRouter.route("/").post(postOneLetter);
 apiLetterRouter
     .route("/:letterId")
     .get(getOneLetter)
