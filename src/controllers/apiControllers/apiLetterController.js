@@ -11,7 +11,42 @@ export const getOneLetter = async (req, res) => {
     }
 };
 
-export const patchOneLetter = (req, res) => {};
+export const patchOneLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const {
+            senderId,
+            receiverId,
+            title,
+            body,
+            isFromPosting,
+            isRoot,
+            parentPostingId,
+            rootLetterId,
+            letterIdArray,
+            isChecking,
+        } = req.body;
+        const newLetter = await Letter.findByIdAndUpdate(
+            letterId,
+            {
+                senderId,
+                receiverId,
+                title,
+                body,
+                isFromPosting,
+                isRoot,
+                parentPostingId,
+                rootLetterId,
+                letterIdArray,
+                isChecking,
+            },
+            { new: true }
+        );
+        httpResponse.SUCCESS_OK(res, "", newLetter);
+    } catch (error) {
+        httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
 export const deleteOneLetter = (req, res) => {};
 
