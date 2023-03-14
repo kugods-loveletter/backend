@@ -19,9 +19,8 @@ export const postOnePosting = async (req, res) => {
             userId,
             title,
             body,
-            isChecking : 0
         });
-        return httpResponse.SUCCESS_OK(res, "", posting._id);
+        return httpResponse.SUCCESS_OK(res, "", posting);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
@@ -29,29 +28,32 @@ export const postOnePosting = async (req, res) => {
 
 export const getOnePosting = async (req, res) => {
     try {
-        const id = req.params.postingId;
-        const posting = await Posting.find({_id: `${id}`});
-        return httpResponse.SUCCESS_OK(res, "", posting);
+        const postingId = req.params.postingId;
+        const postingInfo = await Posting.find({ _id: postingId });
+        return httpResponse.SUCCESS_OK(res, "", postingInfo);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
 };
 
-
 export const patchOnePosting = async (req, res) => {
-    const { title, body } = req.body;
     try {
-        const id = req.params.postingId;
-        const filter = { _id: ObjectId(id) };
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            title: title,
-            body: body
-          },
-        };
-        const result = await Posting.updateOne(filter, updateDoc, options);
-        return httpResponse.SUCCESS_OK(res, "", result);
+        const { postingId } = req.params;
+        const { userId, title, body, replyLetterIdArray, isChecking, like } =
+            req.body;
+        const newPosting = await Letter.findByIdAndUpdate(
+            postingId,
+            {
+                userId,
+                title,
+                body,
+                replyLetterIdArray,
+                isChecking,
+                like,
+            },
+            { new: true }
+        );
+        return httpResponse.SUCCESS_OK(res, "", newPosting);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
@@ -59,16 +61,18 @@ export const patchOnePosting = async (req, res) => {
 
 export const deleteOnePosting = async (req, res) => {
     try {
-        const id = req.params.postingId;
-        const result = await Posting.deleteOne({ _id: ObjectId(id) });
-        return httpResponse.SUCCESS_OK(res, "", result);
+        const { postingId } = req.params;
+        await Posting.findByIdAndDelete(postingId);
+        return httpResponse.SUCCESS_OK(
+            res,
+            "",
+            `id가 ${postingId}인 posting을 삭제했습니다.`
+        );
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
 };
 
-export const getAllReplyLetters = (req, res) => {
-    
-};
+export const getAllReplyLetters = (req, res) => {};
 
 export const postOneReplyLetter = (req, res) => {};
