@@ -1,7 +1,7 @@
 const { httpResponse } = require("../../config/http-response");
 const { ObjectId } = require("mongodb");
-import User from "../../models/User";
 import Posting from "../../models/Posting";
+import Letter from "../../models/Letter";
 
 export const getAllPostings = async (req, res) => {
     try {
@@ -12,9 +12,9 @@ export const getAllPostings = async (req, res) => {
     }
 };
 export const postOnePosting = async (req, res) => {
-    const userId = req.session.loggedInUser._id;
-    const { title, body } = req.body;
     try {
+        const userId = req.session.loggedInUser._id;
+        const { title, body } = req.body;
         const posting = await Posting.create({
             userId,
             title,
@@ -41,7 +41,7 @@ export const patchOnePosting = async (req, res) => {
         const { postingId } = req.params;
         const { userId, title, body, replyLetterIdArray, isChecking, like } =
             req.body;
-        const newPosting = await Letter.findByIdAndUpdate(
+        const newPosting = await Posting.findByIdAndUpdate(
             postingId,
             {
                 userId,
@@ -62,7 +62,13 @@ export const patchOnePosting = async (req, res) => {
 export const deleteOnePosting = async (req, res) => {
     try {
         const { postingId } = req.params;
-        await Posting.findByIdAndDelete(postingId);
+        await Posting.findByIdAndUpdate(
+            postingId,
+            {
+                isDeleted : true
+            },
+            { new: true }
+        );
         return httpResponse.SUCCESS_OK(
             res,
             "",
@@ -73,6 +79,37 @@ export const deleteOnePosting = async (req, res) => {
     }
 };
 
-export const getAllReplyLetters = (req, res) => {};
+export const getAllReplyLetters = async (req, res) => {
+    try {
+        const parentPostingId = req.params.postingId;
+        const letters = await Letter.find({parentPostingId:parentPostingId});
+        return httpResponse.SUCCESS_OK(res, "", letters);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
 
-export const postOneReplyLetter = (req, res) => {};
+};
+
+export const postOneReplyLetter = async (req, res) => {
+    try {
+        const parentPostingId = req.params.postingId;
+        const senderId = req.session.loggedInUser._id;
+        const receiverId = await Posting.findById(parentPostingId, "_userId");
+        const { title, body } = req.body;
+        const letter = await Letter.create({
+            senderId,
+            receiverId,
+            title,
+            body,
+            isRoot:true,
+            parentPostingId,
+        });
+        const _letter = await Letter.findByIdAndUpdate(letter._id,{ rootLetterId:letter._id },{ new: true })
+        return httpResponse.SUCCESS_OK(res, "", _letter);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
+
+
+

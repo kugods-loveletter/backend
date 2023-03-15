@@ -18,15 +18,21 @@ export const postOneLetter = async (req, res) => {
         const { title, body } = req.body;
         const senderId = parentLetter.receiverId;
         const receiverId = parentLetter.senderId;
+        const parentPostingId = parentLetter.parentPostingId;
         const rootLetterId = parentLetter.rootLetterId;
         const letter = await Letter.create({
             senderId,
             receiverId,
             title,
             body,
+            isRoot:false,
+            parentPostingId,
             parentLetterId,
             rootLetterId,
         });
+        const {childrenLetterIdArray} = await Letter.findById(rootLetterId,{childrenLetterIdArray:1});
+        childrenLetterIdArray.push(letter._id);
+        await Letter.findByIdAndUpdate(letter._id, {childrenLetterIdArray},{new:true})
         httpResponse.SUCCESS_OK(res, "", letter);
     } catch (error) {
         httpResponse.BAD_REQUEST(res, "", error);
@@ -37,32 +43,14 @@ export const patchOneLetter = async (req, res) => {
     try {
         const { letterId } = req.params;
         const {
-            senderId,
-            receiverId,
             title,
             body,
-            isRoot,
-            parentPostingId,
-            parentLetterId,
-            rootLetterId,
-            childrenLetterIdArray,
-            isChecking,
-            like,
         } = req.body;
         const newLetter = await Letter.findByIdAndUpdate(
             letterId,
             {
-                senderId,
-                receiverId,
                 title,
                 body,
-                isRoot,
-                parentPostingId,
-                parentLetterId,
-                rootLetterId,
-                childrenLetterIdArray,
-                isChecking,
-                like,
             },
             { new: true }
         );
@@ -75,7 +63,9 @@ export const patchOneLetter = async (req, res) => {
 export const deleteOneLetter = async (req, res) => {
     try {
         const { letterId } = req.params;
-        await Letter.findByIdAndDelete(letterId);
+        await Letter.findByIdAndUpdate(letterId,{
+            isDeleted: true
+        });
         httpResponse.SUCCESS_OK(
             res,
             `id가 ${letterId}인 letter를 삭제했습니다.`,
