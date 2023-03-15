@@ -24,7 +24,6 @@ const letterSchema = new mongoose.Schema({
     rootLetterId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Letter",
-        required: true,
     },
     childrenLetterIdArray: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
