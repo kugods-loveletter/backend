@@ -30,6 +30,7 @@ const letterSchema = new mongoose.Schema({
         { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
     ],
     isChecking: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
     like: { type: Number, default: 0 },
 });
 
