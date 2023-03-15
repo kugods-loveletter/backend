@@ -8,9 +8,7 @@ const loginUserToSession = (req, user) => {
     req.session.loggedInUser = user;
 };
 
-export const getSignup = (req, res) => {
-    return res.send("회원가입 페이지 구현을 위한 URL");
-};
+
 
 export const postSignup = async (req, res) => {
     const { id, email, pw, confirmPw } = req.body;
@@ -42,9 +40,6 @@ export const postSignup = async (req, res) => {
     }
 };
 
-export const getLogin = (req, res) => {
-    return res.send("로그인 페이지 구현을 위한 URL");
-};
 
 export const postLogin = async (req, res) => {
     const { id, pw } = req.body;
