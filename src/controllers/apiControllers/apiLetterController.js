@@ -30,9 +30,9 @@ export const postOneLetter = async (req, res) => {
             parentLetterId,
             rootLetterId,
         });
-        const {childrenLetterIdArray} = await Letter.findById(rootLetterId,{childrenLetterIdArray:1});
+        const {childrenLetterIdArray} = await Letter.findById(rootLetterId,{_id:0, childrenLetterIdArray:1});
         childrenLetterIdArray.push(letter._id);
-        await Letter.findByIdAndUpdate(letter._id, {childrenLetterIdArray},{new:true})
+        await Letter.findByIdAndUpdate(rootLetterId, {childrenLetterIdArray:childrenLetterIdArray},{new:true})
         httpResponse.SUCCESS_OK(res, "", letter);
     } catch (error) {
         httpResponse.BAD_REQUEST(res, "", error);
@@ -77,12 +77,13 @@ export const deleteOneLetter = async (req, res) => {
 };
 
 export const getAllLettersArray = async (req, res) => {
+       
     try {
         const { letterId } = req.params;
-        const { rootLetterId } = await Letter.find({ _id: letterId });
-        const { letterIdArray } = await Letter.find({ _id: rootLetterId });
-        const letterArray = await letterIdArray.populate("letterIdArray");
-        httpResponse.SUCCESS_OK(res, "", { letterArray });
+        const { rootLetterId } = await Letter.findById(letterId, {rootLetterId:1});
+        const  letterIdArray  = await Letter.findById(rootLetterId, {_id:0, childrenLetterIdArray:1});
+        const _letterArray = await letterIdArray.populate("childrenLetterIdArray");
+        httpResponse.SUCCESS_OK(res, "", _letterArray);
     } catch (error) {
         httpResponse.BAD_REQUEST(res, "", error);
     }

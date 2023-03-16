@@ -1,5 +1,4 @@
 const { httpResponse } = require("../../config/http-response");
-const { ObjectId } = require("mongodb");
 import Posting from "../../models/Posting";
 import Letter from "../../models/Letter";
 
@@ -94,17 +93,24 @@ export const postOneReplyLetter = async (req, res) => {
     try {
         const parentPostingId = req.params.postingId;
         const senderId = req.session.loggedInUser._id;
-        const receiverId = await Posting.findById(parentPostingId, "_userId");
+        const receiverId = await Posting.findById(parentPostingId, {_id:0,userId:1});
         const { title, body } = req.body;
         const letter = await Letter.create({
             senderId,
-            receiverId,
+            receiverId : receiverId.userId,
             title,
             body,
             isRoot:true,
             parentPostingId,
         });
-        const _letter = await Letter.findByIdAndUpdate(letter._id,{ rootLetterId:letter._id },{ new: true })
+        const _letter = await Letter.findByIdAndUpdate(
+            letter._id,
+            { 
+                rootLetterId:letter._id,
+                childrenLetterIdArray :letter._id 
+            }, 
+            { new: true }
+        );
         return httpResponse.SUCCESS_OK(res, "", _letter);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
