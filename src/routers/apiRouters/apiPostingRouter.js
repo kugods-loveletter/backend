@@ -8,6 +8,7 @@ import {
     getAllReplyLetters,
     postOneReplyLetter,
     likePosting,
+    checkPosting,
 } from "../../controllers/apiControllers/apiPostingController";
 
 const apiPostingRouter = express.Router();
@@ -25,4 +26,7 @@ apiPostingRouter
 apiPostingRouter
     .route("/:postingId/like")
     .patch(likePosting);
+apiPostingRouter
+    .route("/:postingId/check")
+    .patch(checkPosting);
 export default apiPostingRouter;

@@ -91,3 +91,19 @@ export const likeNotice = async (req, res) => {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
 };
+
+export const checkNotice = async (req, res) => {
+    try {
+        const { noticeId } = req.params;
+        const { isChecking } = await Notice.findById(noticeId, {_id: 0, isChecking:1});
+        if(!isChecking){
+            await Notice.findByIdAndUpdate(noticeId, {isChecking: true});
+            var data = "신고 완료 되었습니다.";
+        } else {
+            var data = "이미 신고 되었습니다.";
+        }
+        return httpResponse.SUCCESS_OK(res, "", data);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};

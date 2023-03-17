@@ -118,3 +118,19 @@ export const likeLetter = async (req, res) => {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
 };
+
+export const checkLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const { isChecking } = await Letter.findById(letterId, {_id: 0, isChecking:1});
+        if(!isChecking){
+            await Letter.findByIdAndUpdate(letterId, {isChecking: true});
+            var data = "신고 완료 되었습니다.";
+        } else {
+            var data = "이미 신고 되었습니다.";
+        }
+        return httpResponse.SUCCESS_OK(res, "", data);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};

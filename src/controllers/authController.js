@@ -2,7 +2,6 @@ const { httpResponse } = require("../config/http-response");
 
 import User from "../models/User";
 import bcrypt from "bcrypt";
-import { NULL } from "sass";
 
 const loginUserToSession = (req, user) => {
     req.session.isLoggedIn = true;
