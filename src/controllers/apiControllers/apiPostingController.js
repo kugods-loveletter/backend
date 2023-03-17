@@ -38,17 +38,15 @@ export const getOnePosting = async (req, res) => {
 export const patchOnePosting = async (req, res) => {
     try {
         const { postingId } = req.params;
-        const { userId, title, body, replyLetterIdArray, isChecking, like } =
-            req.body;
+        const {
+            title,
+            body,
+        } = req.body;
         const newPosting = await Posting.findByIdAndUpdate(
             postingId,
             {
-                userId,
                 title,
                 body,
-                replyLetterIdArray,
-                isChecking,
-                like,
             },
             { new: true }
         );
