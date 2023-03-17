@@ -76,3 +76,18 @@ export const deleteOneNotice = async (req, res) => {
     }
 };
 
+export const likeNotice = async (req, res) => {
+    try {
+        const { noticeId } = req.params;
+        const notice = await Notice.findByIdAndUpdate(
+            noticeId,
+            {
+                $inc: { like: 1 }
+            },
+            { new: true }
+        );
+        return httpResponse.SUCCESS_OK(res, "", notice);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};

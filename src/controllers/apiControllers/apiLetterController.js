@@ -102,3 +102,19 @@ export const getChildrenLettersArray = (req, res) => {
         httpResponse.BAD_REQUEST(res, "", error);
     }
 };
+
+export const likeLetter = async (req, res) => {
+    try {
+        const { letterId } = req.params;
+        const letter = await Letter.findByIdAndUpdate(
+            letterId,
+            {
+                $inc: { like: 1 }
+            },
+            { new: true }
+        );
+        return httpResponse.SUCCESS_OK(res, "", letter);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
