@@ -2,6 +2,7 @@ const { httpResponse } = require("../config/http-response");
 
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import { NULL } from "sass";
 
 const loginUserToSession = (req, user) => {
     req.session.isLoggedIn = true;
@@ -60,3 +61,17 @@ export const postLogin = async (req, res) => {
         }
     }
 };
+
+export const getLogout = async (req,res) => {
+    
+
+    try {
+        req.session.isLoggedIn = false;
+        req.session.destroy();
+        return httpResponse.SUCCESS_OK(res, "", '로그아웃 완료되었습니다.');
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+
+   
+}
