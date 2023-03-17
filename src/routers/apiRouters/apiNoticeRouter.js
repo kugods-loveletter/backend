@@ -5,6 +5,7 @@ import {
     getOneNotice,
     patchOneNotice,
     deleteOneNotice,
+    likeNotice,
 } from "../../controllers/apiControllers/apiNoticeController";
 
 const apiNoticeRouter = express.Router();
@@ -15,4 +16,8 @@ apiNoticeRouter
     .get(getOneNotice)
     .patch(patchOneNotice)
     .delete(deleteOneNotice);
+
+apiNoticeRouter
+    .route("/:noticeId/like")
+    .patch(likeNotice);
 export default apiNoticeRouter;

@@ -120,5 +120,19 @@ export const postOneReplyLetter = async (req, res) => {
     }
 };
 
-
+export const likePosting = async (req, res) => {
+    try {
+        const { postingId } = req.params;
+        const posting = await Posting.findByIdAndUpdate(
+            postingId,
+            {
+                $inc: { like: 1 }
+            },
+            { new: true }
+        );
+        return httpResponse.SUCCESS_OK(res, "", posting);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
 
