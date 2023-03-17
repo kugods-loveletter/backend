@@ -136,3 +136,18 @@ export const likePosting = async (req, res) => {
     }
 };
 
+export const checkPosting = async (req, res) => {
+    try {
+        const { postingId } = req.params;
+        const { isChecking } = await Posting.findById(postingId, {_id: 0, isChecking:1});
+        if(!isChecking){
+            await Posting.findByIdAndUpdate(postingId, {isChecking: true});
+            var data = "신고 완료 되었습니다.";
+        } else {
+            var data = "이미 신고 되었습니다.";
+        }
+        return httpResponse.SUCCESS_OK(res, "", data);
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};

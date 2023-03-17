@@ -8,6 +8,7 @@ import {
     getParentLettersArray,
     getChildrenLettersArray,
     likeLetter,
+    checkLetter,
 } from "../../controllers/apiControllers/apiLetterController";
 
 const apiLetterRouter = express.Router();
@@ -26,4 +27,7 @@ apiLetterRouter
 apiLetterRouter
     .route("/:letterId/like")
     .patch(likeLetter);
+apiLetterRouter
+    .route("/:letterId/check")
+    .patch(checkLetter);
 export default apiLetterRouter;
