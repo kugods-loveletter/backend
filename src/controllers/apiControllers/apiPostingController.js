@@ -81,12 +81,13 @@ export const deleteOnePosting = async (req, res) => {
 export const getAllReplyLetters = async (req, res) => {
     try {
         const parentPostingId = req.params.postingId;
-        const letters = await Letter.find({parentPostingId:parentPostingId});
-        return httpResponse.SUCCESS_OK(res, "", letters);
+        const letters = await Posting.findById(parentPostingId, {_id: 0, replyLetterIdArray:1});
+        console.log(letters);       
+        const  letterArray  = await letters.populate("replyLetterIdArray");
+        return httpResponse.SUCCESS_OK(res, "", letterArray);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
-
 };
 
 export const postOneReplyLetter = async (req, res) => {
@@ -111,6 +112,10 @@ export const postOneReplyLetter = async (req, res) => {
             }, 
             { new: true }
         );
+    
+        const { replyLetterIdArray } = await Posting.findById(parentPostingId,{_id:0, replyLetterIdArray:1});
+        replyLetterIdArray.push(letter._id);
+        await Posting.findByIdAndUpdate(parentPostingId, {replyLetterIdArray:replyLetterIdArray},{new:true})
         return httpResponse.SUCCESS_OK(res, "", _letter);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
