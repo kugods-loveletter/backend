@@ -12,7 +12,7 @@ const app = express();
 const PORT = 4000;
 
 app.listen(PORT, () => {
-    console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
+    console.log(`✅ Server listenting on port ${PORT} 🚀`);
 });
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
