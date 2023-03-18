@@ -1,13 +1,17 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-});
+const handleDBConnect = () => {
+    console.log("✅ Connected to DB");
+};
+const handleDBError = (error) => {
+    console.log("❌ DB Error", error);
+};
 
-const db = mongoose.connection;
+const connect = mongoose
+    .connect(process.env.MONGO_URL, {
+        useNewUrlParser: true,
+        dbName: "loveletter",
+    })
+    .then(handleDBConnect, handleDBError);
 
-const handleOpen = () => console.log("✅ Connected to DB");
-const handleError = (error) => console.log("❌ DB Error", error);
-
-db.on("error", handleError);
-db.once("open", handleOpen);
+module.exports = { connect };

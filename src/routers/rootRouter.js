@@ -1,14 +1,12 @@
-import express from "express";
-import { getHome } from "../controllers/rootController";
+const { getHome } = require("../controllers/rootController");
 
-import authRouter from "./authRouter";
+const { authRouter } = require("./authRouter");
+const { apiUserRouter } = require("./apiRouters/apiUserRouter");
+const { apiPostingRouter } = require("./apiRouters/apiPostingRouter");
+const { apiLetterRouter } = require("./apiRouters/apiLetterRouter");
+const { apiNoticeRouter } = require("./apiRouters/apiNoticeRouter");
 
-import apiUserRouter from "./apiRouters/apiUserRouter";
-import apiPostingRouter from "./apiRouters/apiPostingRouter";
-import apiLetterRouter from "./apiRouters/apiLetterRouter";
-import apiNoticeRouter from "./apiRouters/apiNoticeRouter";
-
-const rootRouter = express.Router();
+const rootRouter = require("express").Router();
 
 rootRouter.route("/").get(getHome);
 
@@ -19,4 +17,4 @@ rootRouter.use("/api/posting", apiPostingRouter);
 rootRouter.use("/api/letter", apiLetterRouter);
 rootRouter.use("/api/notice", apiNoticeRouter);
 
-export default rootRouter;
+module.exports = { rootRouter };

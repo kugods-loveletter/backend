@@ -1,12 +1,12 @@
-import "dotenv/config";
-import express from "express";
-import "./config/db";
+require("dotenv").config();
+const express = require("express");
+const { connect } = require("./config/db.js");
 
-import session from "express-session";
-import MongoStore from "connect-mongo";
-import { saveSessionToLocal } from "./middleware";
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const { saveSessionToLocal } = require("./middleware");
 
-import rootRouter from "./routers/rootRouter";
+const { rootRouter } = require("./routers/rootRouter");
 
 const app = express();
 const PORT = 4000;

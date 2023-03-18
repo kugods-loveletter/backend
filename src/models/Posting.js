@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const postingSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,4 +16,4 @@ const postingSchema = new mongoose.Schema({
 });
 
 const Posting = mongoose.model("Posting", postingSchema);
-export default Posting;
+module.exports = { Posting };

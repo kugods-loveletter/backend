@@ -1,5 +1,4 @@
-import express from "express";
-import {
+const {
     getAllNotices,
     postOneNotice,
     getOneNotice,
@@ -7,9 +6,9 @@ import {
     deleteOneNotice,
     likeNotice,
     checkNotice,
-} from "../../controllers/apiControllers/apiNoticeController";
+} = require("../../controllers/apiControllers/apiNoticeController");
 
-const apiNoticeRouter = express.Router();
+const apiNoticeRouter = require("express").Router();
 
 apiNoticeRouter.route("/").get(getAllNotices).post(postOneNotice);
 apiNoticeRouter
@@ -17,10 +16,7 @@ apiNoticeRouter
     .get(getOneNotice)
     .patch(patchOneNotice)
     .delete(deleteOneNotice);
-apiNoticeRouter
-    .route("/:noticeId/like")
-    .patch(likeNotice);
-apiNoticeRouter
-    .route("/:noticeId/check")
-    .patch(checkNotice);
-export default apiNoticeRouter;
+apiNoticeRouter.route("/:noticeId/like").patch(likeNotice);
+apiNoticeRouter.route("/:noticeId/check").patch(checkNotice);
+
+module.exports = { apiNoticeRouter };

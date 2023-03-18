@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
+
 const letterSchema = new mongoose.Schema({
     senderId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -34,4 +35,4 @@ const letterSchema = new mongoose.Schema({
 });
 
 const Letter = mongoose.model("Letter", letterSchema);
-export default Letter;
+module.exports = { Letter };

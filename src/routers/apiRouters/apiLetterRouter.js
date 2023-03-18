@@ -1,5 +1,4 @@
-import express from "express";
-import {
+const {
     postOneLetter,
     getOneLetter,
     patchOneLetter,
@@ -9,10 +8,9 @@ import {
     getChildrenLettersArray,
     likeLetter,
     checkLetter,
-} from "../../controllers/apiControllers/apiLetterController";
+} = require("../../controllers/apiControllers/apiLetterController");
 
-const apiLetterRouter = express.Router();
-
+const apiLetterRouter = require("express").Router();
 apiLetterRouter
     .route("/:letterId")
     .get(getOneLetter)
@@ -24,10 +22,7 @@ apiLetterRouter.route("/:letterId/parentLetters").get(getParentLettersArray);
 apiLetterRouter
     .route("/:letterId/ChildrenLetters")
     .get(getChildrenLettersArray);
-apiLetterRouter
-    .route("/:letterId/like")
-    .patch(likeLetter);
-apiLetterRouter
-    .route("/:letterId/check")
-    .patch(checkLetter);
-export default apiLetterRouter;
+apiLetterRouter.route("/:letterId/like").patch(likeLetter);
+apiLetterRouter.route("/:letterId/check").patch(checkLetter);
+
+module.exports = { apiLetterRouter };
