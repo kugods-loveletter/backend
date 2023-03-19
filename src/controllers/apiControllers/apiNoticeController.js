@@ -4,7 +4,7 @@ import Notice from "../../models/Notice";
 
 export const getAllNotices = async (req, res) => {
     try {
-        const notices = await Notice.find({});
+        const notices = await Notice.find({isDeleted:false});
         return httpResponse.SUCCESS_OK(res, "", notices);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);

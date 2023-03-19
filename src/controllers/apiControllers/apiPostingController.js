@@ -4,7 +4,7 @@ import Letter from "../../models/Letter";
 
 export const getAllPostings = async (req, res) => {
     try {
-        const postings = await Posting.find({}).populate("userId");
+        const postings = await Posting.find({isDeleted:false}).populate("userId");
         return httpResponse.SUCCESS_OK(res, "", postings);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
