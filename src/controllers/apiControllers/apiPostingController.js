@@ -4,7 +4,7 @@ import Letter from "../../models/Letter";
 
 export const getAllPostings = async (req, res) => {
     try {
-        const postings = await Posting.find({});
+        const postings = await Posting.find({}).populate("userId");
         return httpResponse.SUCCESS_OK(res, "", postings);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
@@ -94,39 +94,32 @@ export const postOneReplyLetter = async (req, res) => {
     try {
         const parentPostingId = req.params.postingId;
         const senderId = req.session.loggedInUser._id;
-        const receiverId = await Posting.findById(parentPostingId, {
-            _id: 0,
-            userId: 1,
-        });
+        const posting = await Posting.findById(parentPostingId);
+        const receiverId = await posting.userId;
         const { title, body } = req.body;
-        const letter = await Letter.create({
+        const letterId = await Letter.create({
             senderId,
-            receiverId: receiverId.userId,
+            receiverId,
             title,
             body,
             isRoot: true,
             parentPostingId,
-        });
-        const _letter = await Letter.findByIdAndUpdate(
-            letter._id,
+            childrenLetterIdArray: [],
+        })._id;
+
+        const newletter = await Letter.findByIdAndUpdate(
+            letterId,
             {
-                rootLetterId: letter._id,
-                childrenLetterIdArray: letter._id,
+                rootLetterId: letterId,
+                childrenLetterIdArray: childrenLetterIdArray.push(letterId),
             },
             { new: true }
         );
 
-        const { replyLetterIdArray } = await Posting.findById(parentPostingId, {
-            _id: 0,
-            replyLetterIdArray: 1,
-        });
-        replyLetterIdArray.push(letter._id);
-        await Posting.findByIdAndUpdate(
-            parentPostingId,
-            { replyLetterIdArray: replyLetterIdArray },
-            { new: true }
-        );
-        return httpResponse.SUCCESS_OK(res, "", _letter);
+        posting.replyLetterIdArray.push(letterId);
+        posting.save();
+
+        return httpResponse.SUCCESS_OK(res, "", newLetter);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
