@@ -13,13 +13,15 @@ export const getAllPostings = async (req, res) => {
 export const postOnePosting = async (req, res) => {
     try {
         const userId = req.session.loggedInUser._id;
-        const { title, body } = req.body;
+        const { title, body, category } = req.body;
         const posting = await Posting.create({
             userId,
             title,
             body,
+            category,
         });
-        return httpResponse.SUCCESS_OK(res, "", posting);
+        const postingWithUserInfo = await posting.populate("userId");
+        return httpResponse.SUCCESS_OK(res, "", postingWithUserInfo);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
@@ -38,10 +40,7 @@ export const getOnePosting = async (req, res) => {
 export const patchOnePosting = async (req, res) => {
     try {
         const { postingId } = req.params;
-        const {
-            title,
-            body,
-        } = req.body;
+        const { title, body } = req.body;
         const newPosting = await Posting.findByIdAndUpdate(
             postingId,
             {
@@ -62,7 +61,7 @@ export const deleteOnePosting = async (req, res) => {
         await Posting.findByIdAndUpdate(
             postingId,
             {
-                isDeleted : true
+                isDeleted: true,
             },
             { new: true }
         );
@@ -79,9 +78,12 @@ export const deleteOnePosting = async (req, res) => {
 export const getAllReplyLetters = async (req, res) => {
     try {
         const parentPostingId = req.params.postingId;
-        const letters = await Posting.findById(parentPostingId, {_id: 0, replyLetterIdArray:1});
-        console.log(letters);       
-        const  letterArray  = await letters.populate("replyLetterIdArray");
+        const letters = await Posting.findById(parentPostingId, {
+            _id: 0,
+            replyLetterIdArray: 1,
+        });
+        console.log(letters);
+        const letterArray = await letters.populate("replyLetterIdArray");
         return httpResponse.SUCCESS_OK(res, "", letterArray);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
@@ -92,28 +94,38 @@ export const postOneReplyLetter = async (req, res) => {
     try {
         const parentPostingId = req.params.postingId;
         const senderId = req.session.loggedInUser._id;
-        const receiverId = await Posting.findById(parentPostingId, {_id:0,userId:1});
+        const receiverId = await Posting.findById(parentPostingId, {
+            _id: 0,
+            userId: 1,
+        });
         const { title, body } = req.body;
         const letter = await Letter.create({
             senderId,
-            receiverId : receiverId.userId,
+            receiverId: receiverId.userId,
             title,
             body,
-            isRoot:true,
+            isRoot: true,
             parentPostingId,
         });
         const _letter = await Letter.findByIdAndUpdate(
             letter._id,
-            { 
-                rootLetterId:letter._id,
-                childrenLetterIdArray :letter._id 
-            }, 
+            {
+                rootLetterId: letter._id,
+                childrenLetterIdArray: letter._id,
+            },
             { new: true }
         );
-    
-        const { replyLetterIdArray } = await Posting.findById(parentPostingId,{_id:0, replyLetterIdArray:1});
+
+        const { replyLetterIdArray } = await Posting.findById(parentPostingId, {
+            _id: 0,
+            replyLetterIdArray: 1,
+        });
         replyLetterIdArray.push(letter._id);
-        await Posting.findByIdAndUpdate(parentPostingId, {replyLetterIdArray:replyLetterIdArray},{new:true})
+        await Posting.findByIdAndUpdate(
+            parentPostingId,
+            { replyLetterIdArray: replyLetterIdArray },
+            { new: true }
+        );
         return httpResponse.SUCCESS_OK(res, "", _letter);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
@@ -126,7 +138,7 @@ export const likePosting = async (req, res) => {
         const posting = await Posting.findByIdAndUpdate(
             postingId,
             {
-                $inc: { like: 1 }
+                $inc: { like: 1 },
             },
             { new: true }
         );
@@ -139,9 +151,12 @@ export const likePosting = async (req, res) => {
 export const checkPosting = async (req, res) => {
     try {
         const { postingId } = req.params;
-        const { isChecking } = await Posting.findById(postingId, {_id: 0, isChecking:1});
-        if(!isChecking){
-            await Posting.findByIdAndUpdate(postingId, {isChecking: true});
+        const { isChecking } = await Posting.findById(postingId, {
+            _id: 0,
+            isChecking: 1,
+        });
+        if (!isChecking) {
+            await Posting.findByIdAndUpdate(postingId, { isChecking: true });
             var data = "신고 완료 되었습니다.";
         } else {
             var data = "이미 신고 되었습니다.";
