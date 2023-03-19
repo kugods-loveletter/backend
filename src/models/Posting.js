@@ -7,6 +7,7 @@ const postingSchema = new mongoose.Schema({
     },
     title: { type: String },
     body: { type: String },
+    category: { type: String },
     replyLetterIdArray: [
         { type: mongoose.Schema.Types.ObjectId, ref: "Letter" },
     ],
