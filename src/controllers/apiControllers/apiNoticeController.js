@@ -1,10 +1,9 @@
 const { httpResponse } = require("../../config/http-response");
 import Notice from "../../models/Notice";
 
-
 export const getAllNotices = async (req, res) => {
     try {
-        const notices = await Notice.find({isDeleted:false});
+        const notices = await Notice.find({ isDeleted: false });
         return httpResponse.SUCCESS_OK(res, "", notices);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
@@ -38,10 +37,7 @@ export const getOneNotice = async (req, res) => {
 export const patchOneNotice = async (req, res) => {
     try {
         const { noticeId } = req.params;
-        const {
-            title,
-            body,
-        } = req.body;
+        const { title, body } = req.body;
         const newNotice = await Notice.findByIdAndUpdate(
             noticeId,
             {
@@ -62,7 +58,7 @@ export const deleteOneNotice = async (req, res) => {
         await Notice.findByIdAndUpdate(
             noticeId,
             {
-                isDeleted : true
+                isDeleted: true,
             },
             { new: true }
         );
@@ -82,7 +78,7 @@ export const likeNotice = async (req, res) => {
         const notice = await Notice.findByIdAndUpdate(
             noticeId,
             {
-                $inc: { like: 1 }
+                $inc: { like: 1 },
             },
             { new: true }
         );
@@ -95,9 +91,12 @@ export const likeNotice = async (req, res) => {
 export const checkNotice = async (req, res) => {
     try {
         const { noticeId } = req.params;
-        const { isChecking } = await Notice.findById(noticeId, {_id: 0, isChecking:1});
-        if(!isChecking){
-            await Notice.findByIdAndUpdate(noticeId, {isChecking: true});
+        const { isChecking } = await Notice.findById(noticeId, {
+            _id: 0,
+            isChecking: 1,
+        });
+        if (!isChecking) {
+            await Notice.findByIdAndUpdate(noticeId, { isChecking: true });
             var data = "신고 완료 되었습니다.";
         } else {
             var data = "이미 신고 되었습니다.";

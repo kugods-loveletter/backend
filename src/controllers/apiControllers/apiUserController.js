@@ -22,9 +22,9 @@ export const getOneUser = async (req, res) => {
 };
 
 export const getUserSentLetters = async (req, res) => {
-    const userId = req.session.loggedInUser._id;
     try {
-        const letterArray = await Letter.find({ senderId: userId });
+        const senderId = req.session.loggedInUser._id;
+        const letterArray = await Letter.find({ senderId });
         return httpResponse.SUCCESS_OK(res, "", letterArray);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
@@ -32,9 +32,9 @@ export const getUserSentLetters = async (req, res) => {
 };
 
 export const getUserReceivedLetters = async (req, res) => {
-    const userId = req.session.loggedInUser._id;
     try {
-        const letterArray = await Letter.find({ receiverId: userId });
+        const receiverId = req.session.loggedInUser._id;
+        const letterArray = await Letter.find({ receiverId });
         return httpResponse.SUCCESS_OK(res, "", letterArray);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
