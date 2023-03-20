@@ -22,8 +22,7 @@ export const getOneUser = async (req, res) => {
 };
 
 export const getUserSentLetters = async (req, res) => {
-    const  userId  = req.params.userId;
-
+    const userId = req.session.loggedInUser._id;
     try {
         const letterArray = await Letter.find({ senderId: userId });
         return httpResponse.SUCCESS_OK(res, "", letterArray);
@@ -33,7 +32,7 @@ export const getUserSentLetters = async (req, res) => {
 };
 
 export const getUserReceivedLetters = async (req, res) => {
-    const  userId  = req.params.userId;
+    const userId = req.session.loggedInUser._id;
     try {
         const letterArray = await Letter.find({ receiverId: userId });
         return httpResponse.SUCCESS_OK(res, "", letterArray);
