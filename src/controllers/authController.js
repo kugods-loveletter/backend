@@ -6,9 +6,8 @@ import bcrypt from "bcrypt";
 const loginUserToSession = (req, user) => {
     req.session.isLoggedIn = true;
     req.session.loggedInUser = user;
+    req.session.save();
 };
-
-
 
 export const postSignup = async (req, res) => {
     const { id, email, pw, confirmPw } = req.body;
@@ -40,7 +39,6 @@ export const postSignup = async (req, res) => {
     }
 };
 
-
 export const postLogin = async (req, res) => {
     const { id, pw } = req.body;
     const user = await User.findOne({ id });
@@ -56,21 +54,36 @@ export const postLogin = async (req, res) => {
             );
         } else {
             loginUserToSession(req, user);
+            console.log(req.session.loggedInUser);
             return httpResponse.SUCCESS_OK(res, "", user);
         }
     }
 };
 
-export const getLogout = async (req,res) => {
-    
-
+export const getLogout = async (req, res) => {
     try {
-        req.session.isLoggedIn = false;
         req.session.destroy();
-        return httpResponse.SUCCESS_OK(res, "", '로그아웃 완료되었습니다.');
+        return httpResponse.SUCCESS_OK(res, "", "로그아웃 완료되었습니다.");
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
+};
 
-   
-}
+export const getLoggedInUser = async (req, res) => {
+    try {
+        const userId = req.session.isLoggedIn;
+        const { isLoggedIn } = req.session;
+        if (isLoggedIn) {
+            const { loggedInUser } = req.session;
+            return httpResponse.SUCCESS_OK(res, "", loggedInUser);
+        } else {
+            return httpResponse.SUCCESS_OK(
+                res,
+                "",
+                "로그인 되어있는 유저가 없습니다"
+            );
+        }
+    } catch (error) {
+        return httpResponse.BAD_REQUEST(res, "", error);
+    }
+};
