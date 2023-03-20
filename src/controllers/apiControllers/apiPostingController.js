@@ -21,6 +21,7 @@ export const postOnePosting = async (req, res) => {
             title,
             body,
             category,
+            replyLetterIdArray: [],
         });
         const postingWithUserInfo = await posting.populate("userId");
         return httpResponse.SUCCESS_OK(res, "", postingWithUserInfo);
@@ -83,7 +84,7 @@ export const getAllReplyLetters = async (req, res) => {
         const letters = await Posting.findById(parentPostingId, {
             _id: 0,
             replyLetterIdArray: 1,
-        });
+        }).populate("replyLetterIdArray");
         console.log(letters);
         const letterArray = await letters.populate("replyLetterIdArray");
         return httpResponse.SUCCESS_OK(res, "", letterArray);
@@ -96,10 +97,10 @@ export const postOneReplyLetter = async (req, res) => {
     try {
         const parentPostingId = req.params.postingId;
         const senderId = req.session.loggedInUser._id;
-        const posting = await Posting.findById(parentPostingId);
-        const receiverId = await posting.userId;
+        const parentPosting = await Posting.findById(parentPostingId);
+        const receiverId = await parentPosting.userId;
         const { title, body } = req.body;
-        const letterId = await Letter.create({
+        const letter = await Letter.create({
             senderId,
             receiverId,
             title,
@@ -107,21 +108,20 @@ export const postOneReplyLetter = async (req, res) => {
             isRoot: true,
             parentPostingId,
             childrenLetterIdArray: [],
-        })._id;
-
-        const newletter = await Letter.findByIdAndUpdate(
+        });
+        const letterId = await letter._id;
+        const letterWithRootLetterId = await Letter.findByIdAndUpdate(
             letterId,
             {
                 rootLetterId: letterId,
-                childrenLetterIdArray: childrenLetterIdArray.push(letterId),
             },
             { new: true }
         );
 
-        posting.replyLetterIdArray.push(letterId);
-        posting.save();
+        await parentPosting.replyLetterIdArray.push(letterId);
+        await parentPosting.save();
 
-        return httpResponse.SUCCESS_OK(res, "", newLetter);
+        return httpResponse.SUCCESS_OK(res, "", letterWithRootLetterId);
     } catch (error) {
         return httpResponse.BAD_REQUEST(res, "", error);
     }
